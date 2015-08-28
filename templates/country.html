@@ -1,0 +1,250 @@
+<div style="width: 100%;">
+	<div style="form-group">
+		<label 	for="countryImage">Country image</label>
+		<br/>
+		<div ng-repeat="cover in covers">
+			<div 	ng-thumb="{ file: cover._file, height: 200 }"></div>
+		</div>
+		<img 	ng-show="!covers.length && country.cover"
+				ng-src="{{country.cover}}"
+				style="width: 50%;" >
+		<input 	type="file" 
+				nv-file-select
+				uploader="coverUploader" >
+		<br/>
+	</div>
+	<div class="form-group">
+		<label for="countryImage">Country flag</label>
+		<br/>
+		<div ng-repeat="flag in flags">
+			<div 	ng-thumb="{ file: flag._file, height: 200 }"></div>
+		</div>
+		<img 	ng-show="!flags.length && country.flag"
+				ng-src="{{country.flag}}"
+				style="width: 50%;" >
+		<input 	type="file" 
+				nv-file-select
+				uploader="flagUploader" >
+		<br/>
+	</div>
+
+	<!-- COUNTRY INFO -->
+
+	<div  class="form-group">
+    	<label>
+	    	Country wish to enjoy your meal
+	    </label>
+	    <input	ng-model="country.wish"
+	           	type="text"
+	           	class="form-control"
+	       		placeholder="Enter translation of wish for selected country...">
+	 	</div>
+		<div  class="form-group">
+	    	<label>
+	        	Country capital city
+	      	</label>
+	      	<input	ng-model="country.capital"
+	            	type="text"
+	            	class="form-control"
+	           		placeholder="Enter capital city...">
+	 	</div>
+
+	 	<div  class="form-group">
+	      	<label>
+	        	Country population
+	      	</label>
+	     	<input	ng-model="country.population"
+	            	type="number"
+	            	class="form-control"
+	           		placeholder="Enter population (as number!)">
+	 	</div>
+
+	 	<div  class="form-group">
+	      	<label>
+	        	Country languages
+	      	</label>
+	      	<input	ng-model="country.languages"
+	            	type="text"
+	            	class="form-control"
+	           		placeholder="Enter languages with , as delimiter (English, French,...)">
+	 	</div>
+	 </div>
+	
+	<!-- FACTS -->
+
+	<div  class="form-group">
+	    <label>
+	        Country facts
+		</label>
+		<br/>
+	    <div  ng-repeat="fact in country.facts" 
+	          ng-class="$parent.selectedCategory == 'facts' && $parent.selectedIndex == $index ? 'panel-'+$parent.selectedStyle : 'panel-primary'"
+	          class="panel" >
+	    	<div  class="panel-heading"
+	              style="position:relative;" >
+	          	<!-- NORMAL VIEW -->
+	          	<div  ng-show="$parent.selectedCategory != 'facts' || $parent.action == 'delete' || $parent.selectedIndex != $index">
+	            	<p   style="display: inline-block; margin-right: 80px;">
+	              		{{fact.fact}}
+	            	</p>
+	          	</div>
+	          	<!-- EDIT VIEW -->
+	          	<div  	ng-show="$parent.selectedCategory == 'facts' && $parent.action != 'delete' && $parent.selectedIndex == $index"
+	                	class="panel-heading" >
+			        <textarea   ng-model="$parent.selectedItem.fact"
+		                        type="text" 
+		                        class="form-control"
+		                        style="display: inline-block; width: 85%;"  
+		                        placeholder="Enter fact about country..."
+		                        rows="2" >
+	            	</textarea>
+	          	</div>
+	          	<!-- BUTTONS -->
+	          	<div  	class="btn-toolbar" 
+		                role="toolbar" 
+		                aria-label="..."
+		                style="position: absolute; top: 7px; right: 7px;">
+		            <div  	ng-show="$parent.selectedCategory != 'facts' || $parent.selectedIndex != $index"
+		                  	class="btn-group" 
+		                  	role="group" 
+		                  	aria-label="..." >
+		              	<button 	ng-click="select('facts', $index, 'update')"
+		                        	type="button"
+		                        	class="btn btn-default" 
+		                        	style="padding-top: 3px; padding-bottom: 3px;">
+		                	Edit 
+		              	</button>
+		              	<button 	ng-click="select('facts', $index, 'delete')"
+		                			type="button" 
+				                  	class="btn btn-danger"
+				                  	style="padding-top: 3px; padding-bottom: 3px;" >
+		                  	<span aria-hidden="true">&times;</span>
+		              	</button>
+		            </div>
+		            <div  	ng-show="$parent.selectedCategory == 'facts' && $parent.selectedIndex == $index" 
+		                  	class="btn-group" 
+		                  	role="group" 
+		                  	aria-label="..." >
+		              	<button   	ng-click="updateCountryFact()"
+		                        	type="button"
+		                        	class="btn {{'btn-'+$parent.selectedStyle}}" 
+		                        	style="padding-top: 3px; padding-bottom: 3px;">
+		                	{{$parent.action == 'delete' ? 'Delete' : 'Save'}} 
+		              	</button>
+		              	<button ng-click="select(null, -1, null)"
+		                      	type="button" 
+		                      	class="btn btn-primary"
+		                      	style="padding-top: 3px; padding-bottom: 3px;" >
+		               		<span aria-hidden="true">
+		                  		Cancel
+		                	</span>
+		              	</button>
+		            </div>
+		        </div>
+	        </div>
+	    </div>
+	 	<button ng-click="addCountryFact()"
+	            type="button" 
+	            class="btn btn-primary" >
+	        +
+	    </button>
+	</div>
+
+	<!-- SOCIAL ISSUES -->
+
+	<div  class="form-group">
+	    <label>
+		    Social issues
+	    </label>
+	    <br/>
+	    <div  	ng-repeat="issue in country.issues" 
+	          	ng-class="$parent.selectedCategory == 'issues' && $parent.selectedIndex == $index ? 'panel-'+$parent.selectedStyle : 'panel-primary'"
+	            class="panel" >
+	        <div  	class="panel-heading"
+	              	style="position:relative;" >
+	          	<!-- NORMAL VIEW -->
+	          	<div  ng-show="$parent.selectedCategory != 'issues' || $parent.action == 'delete' || $parent.selectedIndex != $index">
+	            	<p   style="display: inline-block; margin-right: 80px;">
+	            		{{issue.issue}}
+	            	</p>
+	            	<p>
+	            		<strong>url:</strong> <a ng-href="{{issue.url}}">{{issue.url}}</a>	
+	            	</p>
+	          	</div>
+	         	<!-- EDIT VIEW -->
+	          	<div  	ng-show="$parent.selectedCategory == 'issues' && $parent.action != 'delete' && $parent.selectedIndex == $index"
+	                	class="panel-heading" >
+			        <textarea   ng-model="$parent.selectedItem.issue"
+		                        type="text" 
+		                        class="form-control"
+		                        style="display: inline-block; width: 85%;"  
+		                        placeholder="Enter country social issue..."
+		                        rows="2" >
+		            </textarea>
+		            <input	ng-model="$parent.selectedItem.url"
+		            		type="text"
+		            		class="form-control"
+		            		style="width: 85%;" 
+		            		placeholder="Enter url for taking an action...">
+	          	</div>
+	          	<!-- BUTTONS -->
+		        <div  	class="btn-toolbar" 
+		                role="toolbar" 
+		                aria-label="..."
+		                style="position: absolute; top: 7px; right: 7px;">
+		            <div  	ng-show="$parent.selectedCategory != 'issues' || $parent.selectedIndex != $index"
+		                  	class="btn-group" 
+		                  	role="group" 
+		                  	aria-label="..." >
+		              	<button 	ng-click="select('issues', $index, 'update')"
+		                        	type="button"
+		                        	class="btn btn-default" 
+		                        	style="padding-top: 3px; padding-bottom: 3px;">
+		                	Edit 
+		              	</button>
+		              	<button 	ng-click="select('issues', $index, 'delete')"
+		                			type="button" 
+				                  	class="btn btn-danger"
+				                  	style="padding-top: 3px; padding-bottom: 3px;" >
+		                  	<span aria-hidden="true">&times;</span>
+		              	</button>
+		            </div>
+		            <div  	ng-show="$parent.selectedCategory == 'issues' && $parent.selectedIndex == $index" 
+		                  	class="btn-group" 
+		                  	role="group" 
+		                  	aria-label="..." >
+		              	<button   	ng-click="updateCountryIssue()"
+		                        	type="button"
+		                        	class="btn {{'btn-'+$parent.selectedStyle}}" 
+		                        	style="padding-top: 3px; padding-bottom: 3px;">
+		                	{{$parent.action == 'delete' ? 'Delete' : 'Save'}} 
+		              	</button>
+		              	<button ng-click="select(null, -1, null)"
+		                      	type="button" 
+		                      	class="btn btn-primary"
+		                      	style="padding-top: 3px; padding-bottom: 3px;" >
+		               		<span aria-hidden="true">
+		                  		Cancel
+		                	</span>
+		              	</button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+	    <button ng-click="addCountryIssue()"
+	    	    type="button" 
+	            class="btn btn-primary" >
+	        +
+		</button>
+	</div>
+
+	<!-- SUBMIT -->
+	<div class="form-group">
+		<button 	ng-click="updateCountry()"
+					type="submit" 
+					class="btn btn-primary" 
+					role="button">
+			Save
+		</button>
+	</div>
+</div>

@@ -1,0 +1,468 @@
+<div style="width: 100%;">
+  <div  class="form-group">
+      <label  for="recipeName">Recipe name</label>
+      <input  type="text" 
+              class="form-control" 
+              id="recipeName" 
+              name="recipeName" 
+              placeholder="Enter recipe name" 
+              ng-model="recipe.name">
+    </div>
+
+    <!-- CATEGORY -->
+
+    <div  class="form-group">
+      <label>
+        Recipe flags
+      </label>
+      <br />
+      <div  id="recipeTypes" >
+        <span   ng-repeat="flag in flags">
+          <button   ng-click="toggleFlag(flag)"
+                    ng-class="isFlagActive(flag) ? 'active' : ''"
+                    class="btn btn-primary" >
+            {{flag.name}}
+          </button>
+        </span>
+      </div>
+      <!-- <div  id="recipeTypes" 
+            class="btn-group btn-group-justified" 
+            role="group">
+        <button   ng-class="recipe.type == 1 ? 'active' : ''"
+                  ng-click="setType(1)"
+                  type="button" 
+                  class="btn btn-primary" 
+                  style="width: 25%;">
+          Apetizer
+        </button>
+        <button   ng-class="recipe.type == 2 ? 'active' : ''"
+                  ng-click="setType(2)"
+                  type="button" 
+                  class="btn btn-primary"
+                  style="width: 25%;">
+          Breakfast
+        </button>
+        <button   ng-class="recipe.type == 3 ? 'active' : ''"
+                  ng-click="setType(3)"
+                  type="button" 
+                  class="btn btn-primary" 
+                  style="width: 25%;">
+          Main Course
+        </button>
+        <button   ng-class="recipe.type == 4 ? 'active' : ''"
+                  ng-click="setType(4)"
+                  type="button" 
+                  class="btn btn-primary"
+                  style="width: 25%;">
+          Dessert
+        </button>
+      </div> -->
+    </div>
+
+    <!-- TIME -->
+
+    <div  class="form-group" >
+      <label  for="recipeTime">
+        Time of preparation
+      </label>
+      <input  ng-model="recipe.time"
+              type="text" 
+              class="form-control" 
+              id="recipeTime" 
+              name="recipeTime" 
+              placeholder="ex. 15-30min" 
+              value="">
+    </div>
+
+    <!-- PRESENTATION -->
+
+    <div  class="form-group" >
+      <label  for="recipeTime" >
+        Presentation
+      </label>
+      <input  ng-model="recipe.presentation"
+              type="text" 
+              class="form-control" 
+              id="recipePresentation" 
+              name="recipePresentation" 
+              placeholder="ex. How to serve the meal" >
+    </div>
+
+    <!-- INGREDIENTS -->
+
+    <div  class="form-group">
+      <label>
+        Ingredients
+      </label>
+      <div  ng-repeat="ingredient in recipe.ingredients" 
+            ng-class="$parent.selectedCategory == 'ingredients' && $parent.selectedIndex == $index ? 'panel-'+$parent.selectedStyle : 'panel-primary'"
+            class="panel" >
+        <div  class="panel-heading"
+              style="position:relative;" >
+          <!-- NORMAL VIEW -->
+          <div  ng-show="$parent.selectedCategory != 'ingredients' || $parent.action == 'delete' || $parent.selectedIndex != $index">
+            <p   style="display: inline-block; width: 30px; text-align: right;">
+              {{ingredient.amount}}
+            </p>
+            <p   style="display: inline-block; width: 40px;">
+              {{getUnitById(ingredient.unit).name}}
+            </p>
+            <p   style="display: inline-block;">
+              {{getIngredientById(ingredient.ingredient).name}}
+            </p>
+          </div>
+          <!-- EDIT VIEW -->
+          <div  ng-show="$parent.selectedCategory == 'ingredients' && $parent.action != 'delete' && $parent.selectedIndex == $index"
+                class="panel-heading" >
+            <input  ng-model="$parent.selectedItem.amount"
+                    type="number" 
+                    class="form-control"
+                    style="display: inline-block; width: 80px;"  
+                    placeholder="0" >
+            <div  dropdown 
+                  is-open="status.isopen" 
+                  class="btn-group" 
+                  style="width: 80px;" >
+              <button   dropdown-toggle
+                        type="button" 
+                        class="btn btn-primary dropdown-toggle"
+                        style="width: 100%;" >
+                {{getUnitById($parent.selectedItem.unit).name}} 
+                <span   class="caret">
+                </span>
+              </button>
+              <ul   class="dropdown-menu" 
+                    role="menu">
+                <li ng-repeat="unit in $parent.units">
+                  <a  ng-click="$parent.$parent.selectedItem.unit=unit.id">
+                    {{unit.name}}
+                  </a>
+                </li>
+              </ul>
+            </div>          
+            <ui-select  ng-model="$parent.$parent.ingredient.selected" 
+                        theme="bootstrap"
+                        style="display: inline-block; width: 70%;" 
+                        title="Choose a ingredient">
+              <ui-select-match  placeholder="Enter ingredient name ...">
+                {{$select.selected.name}}
+              </ui-select-match>
+              <ui-select-choices  repeat="ingredient in ingredients | filter: $select.search">
+                <span   ng-bind-html="ingredient.name | highlight: $select.search"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <!-- BUTTONS -->
+          <div  class="btn-toolbar" 
+                role="toolbar" 
+                aria-label="..."
+                style="position: absolute; top: 7px; right: 7px;">
+            <div  ng-show="$parent.selectedCategory != 'ingredients' || $parent.selectedIndex != $index"
+                  class="btn-group" 
+                  role="group" 
+                  aria-label="..." >
+              <button   ng-click="select('ingredients', $index, 'update')"
+                        type="button"
+                        class="btn btn-default" 
+                        style="padding-top: 3px; padding-bottom: 3px;">
+                Edit 
+              </button>
+              <button ng-click="select('ingredients', $index, 'delete')"
+                  type="button" 
+                  class="btn btn-danger"
+                  style="padding-top: 3px; padding-bottom: 3px;" >
+                  <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div  ng-show="$parent.selectedCategory == 'ingredients' && $parent.selectedIndex == $index" 
+                  class="btn-group" 
+                  role="group" 
+                  aria-label="..." >
+              <button   ng-click="updateRecipeIngredient()"
+                        type="button"
+                        class="btn {{'btn-'+$parent.selectedStyle}}" 
+                        style="padding-top: 3px; padding-bottom: 3px;">
+                {{$parent.action == 'delete' ? 'Delete' : 'Save'}} 
+              </button>
+              <button ng-click="select(null, -1, null)"
+                      type="button" 
+                      class="btn btn-primary"
+                      style="padding-top: 3px; padding-bottom: 3px;" >
+                <span aria-hidden="true">
+                  Cancel
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <button ng-click="addRecipeIngredient()"
+                type="button" 
+                class="btn btn-primary" >
+          +
+        </button>
+        <button ng-click="manageIngredients()"
+                type="button" 
+                class="btn btn-danger"
+                style="float: right;" >
+          Manage
+        </button>
+      </div>
+    </div>
+
+    <!-- TOOLS -->
+
+    <div  class="form-group">
+      <label>
+        Tools
+      </label>
+      <div  ng-repeat="tool in recipe.tools" 
+            ng-class="$parent.selectedCategory == 'tools' && $parent.selectedIndex == $index ? 'panel-'+$parent.selectedStyle : 'panel-primary'"
+            class="panel" >
+        <div  class="panel-heading"
+              style="position:relative;" >
+          <!-- NORMAL VIEW -->
+          <div  ng-show="$parent.selectedCategory != 'tools' || $parent.action == 'delete' || $parent.selectedIndex != $index">
+            <p   style="display: inline-block;">
+              {{getToolById(tool.tool).name}}
+            </p>
+          </div>
+          <!-- EDIT VIEW -->
+          <div  ng-show="$parent.selectedCategory == 'tools' && $parent.action != 'delete' && $parent.selectedIndex == $index"
+                class="panel-heading" >    
+            <ui-select  ng-model="$parent.$parent.tool.selected" 
+                        theme="bootstrap"
+                        style="display: inline-block; width: 70%;" 
+                        title="Choose a ingredient">
+              <ui-select-match  placeholder="Enter tool name ...">
+                {{$select.selected.name}}
+              </ui-select-match>
+              <ui-select-choices  repeat="tool in tools | filter: $select.search">
+                <span   ng-bind-html="tool.name | highlight: $select.search"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <!-- BUTTONS -->
+          <div  class="btn-toolbar" 
+                role="toolbar" 
+                aria-label="..."
+                style="position: absolute; top: 7px; right: 7px;">
+            <div  ng-show="$parent.selectedCategory != 'tools' || $parent.selectedIndex != $index"
+                  class="btn-group" 
+                  role="group" 
+                  aria-label="..." >
+              <button   ng-click="select('tools', $index, 'update')"
+                        type="button"
+                        class="btn btn-default" 
+                        style="padding-top: 3px; padding-bottom: 3px;">
+                Edit 
+              </button>
+              <button ng-click="select('tools', $index, 'delete')"
+                  type="button" 
+                  class="btn btn-danger"
+                  style="padding-top: 3px; padding-bottom: 3px;" >
+                  <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div  ng-show="$parent.selectedCategory == 'tools' && $parent.selectedIndex == $index" 
+                  class="btn-group" 
+                  role="group" 
+                  aria-label="..." >
+              <button   ng-click="updateRecipeTool()"
+                        type="button"
+                        class="btn {{'btn-'+$parent.selectedStyle}}" 
+                        style="padding-top: 3px; padding-bottom: 3px;">
+                {{$parent.action == 'delete' ? 'Delete' : 'Save'}} 
+              </button>
+              <button ng-click="select(null, -1, null)"
+                      type="button" 
+                      class="btn btn-primary"
+                      style="padding-top: 3px; padding-bottom: 3px;" >
+                <span aria-hidden="true">
+                  Cancel
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <button ng-click="addRecipeTool()"
+                type="button" 
+                class="btn btn-primary" >
+          +
+        </button>
+        <button ng-click="manageTools()"
+                type="button" 
+                class="btn btn-danger"
+                style="float: right;" >
+          Manage
+        </button>
+      </div>
+    </div>
+
+    <!-- COOKING STEPS -->
+
+    <div  class="form-group">
+      <label>
+        Cooking Steps
+      </label>
+      <div  ng-repeat="step in recipe.steps" 
+            ng-class="$parent.selectedCategory == 'steps' && $parent.selectedIndex == $index ? 'panel-'+$parent.selectedStyle : 'panel-primary'"
+            class="panel" >
+        <div  class="panel-heading"
+              style="position:relative;" >
+          <!-- NORMAL VIEW -->
+          <div  ng-show="$parent.selectedCategory != 'steps' || $parent.action == 'delete' || $parent.selectedIndex != $index">
+            <p   style="display: inline-block; margin-right: 80px;">
+              {{step.label}}
+            </p>
+          </div>
+          <!-- EDIT VIEW -->
+          <div  ng-show="$parent.selectedCategory == 'steps' && $parent.action != 'delete' && $parent.selectedIndex == $index"
+                class="panel-heading" >   
+            <div  class="btn-toolbar" 
+                  role="toolbar" 
+                  aria-label="..."
+                  style="display: inline-block; " >
+              <div  class="btn-group" 
+                    role="group" 
+                    aria-label="..." >
+                <button   ng-class="$parent.selectedItem.type == 0 ? 'active' : ''"
+                          ng-click="$parent.selectedItem.type = 0"
+                          type="button" 
+                          class="btn btn-info">
+                  Big chef
+                </button>
+                <button   ng-class="$parent.selectedItem.type == 1 ? 'active' : ''"
+                          ng-click="$parent.selectedItem.type = 1"
+                          type="button" 
+                          class="btn btn-info" >
+                  Little chef
+                </button>
+              </div>
+              <!-- <div  class="btn-group" 
+                    role="group" 
+                    aria-label="...">
+                <button   type="button" 
+                          class="btn btn-info">
+                  <span   class="glyphicon glyphicon-chevron-up"></span>
+                </button>
+                <button   type="button" 
+                          class="btn btn-info"
+                          style="display: inline-block;" >
+                  <span class="glyphicon glyphicon-chevron-down"></span>
+                </button>
+              </div> -->
+            </div>
+            <textarea   ng-model="$parent.selectedItem.label"
+                        type="text" 
+                        class="form-control"
+                        style="display: inline-block; width: 100%;"  
+                        placeholder="Enter description of cooking step..."
+                        rows="3" >
+            </textarea>
+          </div>
+          <!-- BUTTONS -->
+          <div  class="btn-toolbar" 
+                role="toolbar" 
+                aria-label="..."
+                style="position: absolute; top: 7px; right: 7px;">
+            <div  ng-show="$parent.selectedCategory != 'steps' || $parent.selectedIndex != $index"
+                  class="btn-group" 
+                  role="group" 
+                  aria-label="..." >
+              <button   ng-click="select('steps', $index, 'update')"
+                        type="button"
+                        class="btn btn-default" 
+                        style="padding-top: 3px; padding-bottom: 3px;">
+                Edit 
+              </button>
+              <button ng-click="select('steps', $index, 'delete')"
+                  type="button" 
+                  class="btn btn-danger"
+                  style="padding-top: 3px; padding-bottom: 3px;" >
+                  <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div  ng-show="$parent.selectedCategory == 'steps' && $parent.selectedIndex == $index" 
+                  class="btn-group" 
+                  role="group" 
+                  aria-label="..." >
+              <button   ng-click="updateRecipeStep()"
+                        type="button"
+                        class="btn {{'btn-'+$parent.selectedStyle}}" 
+                        style="padding-top: 3px; padding-bottom: 3px;">
+                {{$parent.action == 'delete' ? 'Delete' : 'Save'}} 
+              </button>
+              <button ng-click="select(null, -1, null)"
+                      type="button" 
+                      class="btn btn-primary"
+                      style="padding-top: 3px; padding-bottom: 3px;" >
+                <span aria-hidden="true">
+                  Cancel
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button ng-click="addRecipeStep()"
+              type="button" 
+              class="btn btn-primary" >
+        +
+      </button>
+    </div>
+    
+    <!-- IMAGES -->
+    <div  class="form-group">
+      <label>
+        Images
+      </label>
+      <div class="row">
+        <div  ng-repeat="image in recipe.images"
+              class="col-sm-6 col-md-4" >
+          <div  class="thumbnail"
+                style="position: relative; height: 250px;" >
+            <img  ng-src="{{image.url}}"  
+                  alt=""
+                  style="height: 200px;max-width:100%; max-height:100%; margin:auto; display:block;">
+            <button   ng-show="image.url"
+                      ng-click="removeRecipeImage(image)"
+                      type="button" 
+                      class="btn btn-danger"
+                      style="margin-top: 5px; float: right;">
+              Delete
+            </button>
+            <button   ng-show="image.url && image.presentation != 1"
+                      ng-click="selectRecipeImage(image)"
+                      type="button" 
+                      class="btn btn-primary"
+                      style="margin-top: 5px; float: left;">
+              Select
+            </button>
+          </div>
+        </div>
+        <div  ng-repeat="image in images"
+              class="col-sm-6 col-md-4" >
+          <div  class="thumbnail"
+                style="position: relative; height: 200px;" >
+            <div  ng-thumb="{ file: image._file, height: 190}"
+                  style="height: 200px; max-width:100%; max-height:100%; margin:auto; display:block;"></div>
+          </div>
+        </div>
+      </div>
+      <input  type="file" 
+              nv-file-select
+              uploader="imageUploader" >
+    </div>
+
+    <button   ng-click="updateRecipe()"
+              type="submit" 
+              class="btn btn-success" 
+              style="float: right;" >
+      Save
+    </button>
+  </form>
+</div>

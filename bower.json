@@ -1,0 +1,22 @@
+{
+  "name": "koochooloo",
+  "description": "",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "directory": "app/libs/",
+  "dependencies": {
+    "angular": "1.3.x",
+    "angular-file-upload": "1.1.x",
+    "angular-mocks": "1.3.x",
+    "angular-route": "1.3.x",
+    "angular-resource": "1.3.x",
+    "angular-animate": "1.3.x",
+    "angular-sanitize": "1.4.x",
+    "angular-ui-select": "0.11.x",
+    "angular-bootstrap": "0.12.x",
+    "angular-file-upload": "1.x",
+    "jquery": "~2.1.x",
+    "bootstrap": "~3.3.x"       
+  }
+}

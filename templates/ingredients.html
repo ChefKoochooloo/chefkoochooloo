@@ -1,0 +1,79 @@
+<div 	class="modal-header" 
+		style="position: relative; width: 100%; z-index: 99999!important; " >
+	<div 	style="min-height: 35px;">
+		<button 	ng-click="addIngredient()"
+					class="btn btn-primary"
+					style="position: absolute; right: 30px;">
+			Add ingredient
+		</button>
+	</div>
+</div>
+<div 	id="ingredientsContainer" 
+		class="modal-body" 
+		style="width: 100%; background-color: white; height: 500px; position:fixed; overflow-y:scroll;">
+	<div>
+		<div 	ng-repeat="ingredient in ingredients" 
+				ng-class="$parent.selectedIndex == $index ? 'panel-'+$parent.selectedStyle : 'panel-primary'" 
+				class="panel"
+				style="margin-left: 20px; margin-right: 20px;" >
+		  	<div 	class="panel-heading" >
+		  		<div 	style="width: 100%; padding-right: 150px; display: inline-block; min-height: 30px;">
+			  		<p 	ng-show="$parent.selectedIndex != $index || $parent.action == 'delete'">
+			  			{{ingredient.name}}
+			  		</p>
+		  			<input 	ng-show="$parent.selectedIndex == $index && $parent.action != 'delete'"
+		  					ng-model="$parent.tempName"
+							type="text" 
+							class="form-control"
+							placeholder="Ingredient name">
+		  		</div>
+		  		<div 	ng-show="$parent.selectedIndex != $index"
+		  				class="btn-group" 
+		  				role="group" 
+		  				aria-label="..."
+		  				style="position: absolute; display: inline-block; right: 50px;">
+		  			<button ng-click="selectIngredient($index, 'update')"
+			  				type="button"
+			  				class="btn btn-default">
+			  			Update 
+		  			</button>
+		  			<button ng-click="selectIngredient($index, 'delete')"
+			  				type="button" 
+			  				class="btn btn-danger" >
+			  				<span aria-hidden="true">&times;</span>
+			  		</button>
+		  		</div>
+		  		<div 	ng-show="$parent.selectedIndex == $index"
+		  				class="btn-group" 
+		  				role="group" 
+		  				aria-label="..."
+		  				style="position: absolute; display: inline-block; right: 50px;">
+			  		<button ng-click="updateIngredient()"
+					  		type="button" 
+					  		class="btn {{'btn-'+$parent.selectedStyle}}" >
+					  		{{$parent.action == 'delete' ? 'Delete' : 'Save'}}
+					</button>
+					<button ng-click="selectIngredient(-1, null)"
+					  		type="button" 
+					  		class="btn btn-primary" >
+					  		Cancel
+					</button>
+				</div>
+		  	</div>
+			<div 	ng-show="ingredient.spotlight || ($parent.selectedIndex == $index && $parent.action != 'delete')" 
+					class="panel-body"
+					style="width: 100%; padding-right: 165px; display: inline-block;" >
+				<textarea 	ng-show="$parent.selectedIndex == $index && $parent.action != 'delete'"
+							ng-model="$parent.tempSpotlight"
+							type="textArea" 
+							class="form-control"
+							placeholder="Spotlight"
+							rows="3" >
+				</textarea>
+				<p 	ng-show="$parent.selectedIndex != $index || $parent.action == 'delete'">
+					{{ingredient.spotlight}}
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
