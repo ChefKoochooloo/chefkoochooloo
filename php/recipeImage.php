@@ -2,8 +2,8 @@
 	require_once('db.php');
 	require_once('imageManipulator.php');
 
-  $id       = $_GET['id'];
-	$recipeId = $_GET['recipeId'];
+    $id = isset($_GET['id']) ? $_GET['id'] : '';
+    $recipeId = isset($_GET['recipeId']) ? $_GET['recipeId'] : '';
 
   if (!isset($_GET['action'])) {
     if (!empty($_FILES)) {

@@ -2,8 +2,8 @@
 
 	require_once('db.php');
 
-	$flag 		= $_GET['flag'];
-	$recipe 	= $_GET['recipe'];
+    $flag = isset($_GET['flag']) ? $_GET['flag'] : '';
+    $recipe = isset($_GET['recipe']) ? $_GET['recipe'] : '';
 
 	switch ($_GET['action']) {
 		case 'add':

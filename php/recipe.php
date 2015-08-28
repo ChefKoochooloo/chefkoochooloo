@@ -1,12 +1,12 @@
 <?php
 	require_once('db.php');
 
-	$id 			= $_GET['id'];
-	$country 		= $_GET['country'];
-	$in_type 	    = $_GET['type'];
-	$name	 		= $_GET['name'];
-	$presentation 	= $_GET['presentation'];
-	$time 			= $_GET['time'];
+    $id = isset($_GET['id']) ? $_GET['id'] : '';
+    $country = isset($_GET['country']) ? $_GET['country'] : '';
+    $in_type = isset($_GET['type']) ? $_GET['type'] : '';
+    $name = isset($_GET['name']) ? $_GET['name'] : '';
+    $presentation = isset($_GET['presentation']) ? $_GET['presentation'] : '';
+    $time = isset($_GET['time']) ? $_GET['time'] : '';
 
 	switch ($_GET['action']) {
 		case 'insert':

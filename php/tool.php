@@ -1,9 +1,9 @@
 <?php
 	require_once('db.php');
 
-	$id 	= $_GET['id'];
-	$name 	= $_GET['name'];
-	$url 	= $_GET['url'];
+    $id = isset($_GET['id']) ? $_GET['id'] : '';
+    $name = isset($_GET['name']) ? $_GET['name'] : '';
+    $url = isset($_GET['url']) ? $_GET['url'] : '';
 
 	switch ($_GET['action']) {
 		case 'insert':

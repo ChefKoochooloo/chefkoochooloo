@@ -1,9 +1,9 @@
 <?php
 	require_once('db.php');
 
-	$id 		= $_GET['id'];
-	$tool		= $_GET['tool'];
-	$recipe 	= $_GET['recipe'];
+    $id = isset($_GET['id']) ? $_GET['id'] : '';
+    $tool = isset($_GET['tool']) ? $_GET['tool'] : '';
+    $recipe = isset($_GET['recipe']) ? $_GET['recipe'] : '';
 
 	switch ($_GET['action']) {
 		case 'insert':

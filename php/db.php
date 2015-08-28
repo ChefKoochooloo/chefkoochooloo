@@ -3,5 +3,5 @@
 	error_reporting(E_ALL);
 
 	$db = new SQLite3('../Koochooloo.sqlite', SQLITE3_OPEN_READWRITE);
-        # var_dump($db);
+    # var_dump($db);
 ?>

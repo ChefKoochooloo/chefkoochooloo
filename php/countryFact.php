@@ -1,9 +1,9 @@
 <?php
 	require_once('db.php');
 
-	$id 		= $_GET['id'];
-	$country	= $_GET['country'];
-	$fact		= $_GET['fact'];
+    $id = isset($_GET['id']) ? $_GET['id'] : '';
+    $country = isset($_GET['country']) ? $_GET['country'] : '';
+    $fact = isset($_GET['fact']) ? $_GET['fact'] : '';
 
 	switch ($_GET['action']) {
 		case 'insert':

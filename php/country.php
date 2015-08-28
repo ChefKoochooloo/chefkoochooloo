@@ -1,11 +1,11 @@
 <?php
 	require_once('db.php');
 
-	$id 			= $_GET['id'];
-	$wish 			= $_GET['wish'];
-	$capital 		= $_GET['capital'];
-	$population 	= $_GET['population'];
-	$languages 		= $_GET['languages'];
+    $id = isset($_GET['id']) ? $_GET['id'] : '';
+    $wish = isset($_GET['wish']) ? $_GET['wish'] : '';
+    $capital = isset($_GET['capital']) ? $_GET['capital'] : '';
+    $population = isset($_GET['population']) ? $_GET['population'] : '';
+    $languages = isset($_GET['languages']) ? $_GET['languages'] : '';
 
 	switch ($_GET['action']) {
 		case 'update':

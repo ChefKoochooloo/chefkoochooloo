@@ -2,7 +2,7 @@
 	require_once('db.php');
 	require_once('imageManipulator.php');
 
-	$id = $_GET['id'];
+    $id = isset($_GET['id']) ? $_GET['id'] : '';
 
 	if (!empty($_FILES)) {
 		$country = $db->querySingle('SELECT * FROM ZCOUNTRY WHERE Z_PK='.$id, true);

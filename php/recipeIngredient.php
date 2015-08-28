@@ -1,11 +1,11 @@
 <?php
 	require_once('db.php');
 
-	$id 			= $_GET['id'];
-	$ingredient		= $_GET['ingredient'];
-	$recipe 		= $_GET['recipe'];
-	$unit 			= $_GET['unit'];
-	$amount 		= $_GET['amount'];
+    $id = isset($_GET['id']) ? $_GET['id'] : '';
+    $ingredient = isset($_GET['ingredient']) ? $_GET['ingredient'] : '';
+    $recipe = isset($_GET['recipe']) ? $_GET['recipe'] : '';
+    $unit = isset($_GET['unit']) ? $_GET['unit'] : '';
+    $amount = isset($_GET['amount']) ? $_GET['amount'] : '';
 
 	switch ($_GET['action']) {
 		case 'insert':

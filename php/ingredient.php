@@ -1,9 +1,9 @@
 <?php
 	require_once('db.php');
 
-	$id = $_GET['id'];
-	$name = $_GET['name'];
-	$spotlight = $_GET['spotlight'];
+    $id = isset($_GET['id']) ? $_GET['id'] : '';
+    $name = isset($_GET['name']) ? $_GET['name'] : '';
+    $spotlight = isset($_GET['spotlight']) ? $_GET['spotlight'] : '';
 
 	switch ($_GET['action']) {
 		case 'insert':
