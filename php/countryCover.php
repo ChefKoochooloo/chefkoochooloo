@@ -19,6 +19,8 @@
 
       	 	// saving file to uploads folder
       	  	$manipulator->save('../images/' . $country['ZCODE'] . $fileExtension);
+
+error_log("HERE I AM file=" . '../images/' . $country['ZCODE'] . $fileExtension);
    	 	} else {
     	}	
     }

@@ -1,0 +1,2 @@
+php_value upload_tmp_dir "/tmp"
+php_value upload_max_filesize 10M
