@@ -4,7 +4,7 @@
 
   $id       = $_GET['id'];
 	$recipeId = $_GET['recipeId'];
-  
+
   if (!isset($_GET['action'])) {
     if (!empty($_FILES)) {
       $recipeImageId = $db->querySingle('SELECT Z_PK FROM ZRECIPEIMAGE ORDER BY Z_PK DESC LIMIT 1')+1;
@@ -16,7 +16,7 @@
         if (in_array($fileExtension, $validExtensions)) {
             $newNamePrefix = time() . '_';
             $manipulator = new ImageManipulator($_FILES['file']['tmp_name']);
-   
+
             $db->exec('INSERT INTO ZRECIPEIMAGE (ZURL, ZRECIPE) VALUES ("images/'. $recipeImageId . $fileExtension .'", '.$recipeId.')');
 
             // saving file to uploads folder
@@ -28,7 +28,7 @@
               'alt' =>  ''
             ));
         } else {
-        } 
+        }
       }
   } else {
     switch ($_GET['action']) {
@@ -37,7 +37,7 @@
         if (count($recipeImage) > 0) {
           $db->exec('UPDATE ZRECIPEIMAGE SET ZPRESENTATION=0 WHERE Z_PK='.$recipeImage['Z_PK']);
         }
-        
+
         $db->exec('UPDATE ZRECIPEIMAGE SET ZPRESENTATION=1 WHERE Z_PK='.$id);
 
         $recipeImageResults = $db->query('SELECT * FROM ZRECIPEIMAGE WHERE ZRECIPE = '.$recipeId);
@@ -63,5 +63,5 @@
         break;
     }
   }
-	
+
 ?>

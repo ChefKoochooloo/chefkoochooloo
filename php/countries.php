@@ -1,6 +1,6 @@
 <?php
 	require_once('db.php');
-	
+
 	$countryResults = $db->query('SELECT * FROM ZCOUNTRY ORDER BY ZNAME ASC');
 	$countries = array();
 

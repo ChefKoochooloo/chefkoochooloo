@@ -3,7 +3,7 @@
 
 	if (isset($_GET['recipe'])) {
 		$recipe = $_GET['recipe'];
-	}	
+	}
 
 	//RECIPE STEPS
 	$recipeStepResults = $db->query('SELECT * FROM ZRECIPESTEP WHERE ZRECIPE = '.$recipe.' ORDER BY ZORDER ASC');

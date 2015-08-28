@@ -3,17 +3,17 @@
 
 	$id 		= $_GET['id'];
 	$order 		= $_GET['order'];
-	$type		= $_GET['type'];
+	$in_type	= $_GET['type'];
 	$label		= $_GET['label'];
 	$recipe 	= $_GET['recipe'];
 
 	switch ($_GET['action']) {
 		case 'insert':
-			$db->exec('INSERT INTO ZRECIPESTEP (ZORDER, ZTYPE, ZLABEL, ZRECIPE) VALUES ('.$order.', '.$type.', "'.$label.'", '.$recipe.')');
+			$db->exec('INSERT INTO ZRECIPESTEP (ZORDER, ZTYPE, ZLABEL, ZRECIPE) VALUES ('.$order.', '.$in_type.', "'.$label.'", '.$recipe.')');
 			$id = $db->lastInsertRowid();
 			break;
 		case 'update':
-			$db->exec('UPDATE ZRECIPESTEP SET ZORDER='.$order.', ZTYPE='.$type.', ZLABEL="'.$label.'" WHERE Z_PK='.$id);
+			$db->exec('UPDATE ZRECIPESTEP SET ZORDER='.$order.', ZTYPE='.$in_type.', ZLABEL="'.$label.'" WHERE Z_PK='.$id);
 			break;
 		case 'delete':
 			$db->exec('DELETE FROM ZRECIPESTEP WHERE Z_PK='.$id);

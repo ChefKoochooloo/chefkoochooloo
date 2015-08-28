@@ -16,7 +16,7 @@
 		case 'delete':
 			$db->exec('DELETE FROM ZRECIPETOOL WHERE ZTOOL='.$id);
 			$db->exec('DELETE FROM ZTOOL WHERE Z_PK='.$id);
-			
+
 			echo "true";
 			return;
 	}

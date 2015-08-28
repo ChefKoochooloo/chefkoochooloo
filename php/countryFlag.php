@@ -14,12 +14,12 @@
    		if (in_array($fileExtension, $validExtensions)) {
     	  	$newNamePrefix = time() . '_';
      	   	$manipulator = new ImageManipulator($_FILES['file']['tmp_name']);
- 
+
      	   	$db->exec('UPDATE ZCOUNTRY SET ZFLAG="images/'. $country['ZCODE'] . '_flag' . $fileExtension .'" WHERE Z_PK='.$country['Z_PK']);
 
       	 	// saving file to uploads folder
       	  	$manipulator->save('../images/' . $country['ZCODE'] . '_flag' . $fileExtension);
    	 	} else {
-    	}	
+    	}
     }
 ?>

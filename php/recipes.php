@@ -62,7 +62,7 @@
 			);
 		}
 
-  		// 
+  		//
   		$recipes[] = array(
   			'id'			=>	$recipe['Z_PK'],
   			'name'			=>	$recipe['ZNAME'],

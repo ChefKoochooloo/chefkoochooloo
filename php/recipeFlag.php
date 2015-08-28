@@ -22,7 +22,7 @@
 		$recipeFlags[] = array(
 			'id'		=>	$recipeFlag['Z_PK'],
 			'recipe'	=>	$recipeFlag['ZRECIPE'],
-			'flag'		=> 	$recipeFlag['ZFLAG']	
+			'flag'		=> 	$recipeFlag['ZFLAG']
 		);
 	}
 	echo json_encode($recipeFlags);

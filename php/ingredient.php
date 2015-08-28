@@ -16,7 +16,7 @@
 		case 'delete':
 			$db->exec('DELETE FROM ZRECIPEINGREDIENT WHERE ZINGREDIENT='.$id);
 			$db->exec('DELETE FROM ZINGREDIENT WHERE Z_PK='.$id);
-			
+
 			echo "true";
 			return;
 	}

@@ -3,7 +3,7 @@
 
 	$id 			= $_GET['id'];
 	$country 		= $_GET['country'];
-	$type 			= $_GET['type'];
+	$in_type 	    = $_GET['type'];
 	$name	 		= $_GET['name'];
 	$presentation 	= $_GET['presentation'];
 	$time 			= $_GET['time'];
@@ -21,7 +21,7 @@
 			while ($recipeImage = $recipeImageResults->fetchArray()) {
         		unlink('../'.$recipeImage['ZURL']);
 			}
-			
+
 			$db->exec('DELETE FROM ZRECIPE WHERE Z_PK='.$id);
 			return;
 	}
@@ -40,7 +40,7 @@
 		$recipeFlags[] = array(
 			'id'		=>	$recipeFlag['Z_PK'],
 			'recipe'	=>	$recipeFlag['ZRECIPE'],
-			'flag'		=> 	$recipeFlag['ZFLAG']	
+			'flag'		=> 	$recipeFlag['ZFLAG']
 		);
 	}
 

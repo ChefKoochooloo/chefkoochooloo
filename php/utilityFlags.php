@@ -1,6 +1,6 @@
 <?php
 
-	$db = new SQLite3('Koochooloo.sqlite');
+	$db = new SQLite3('../Koochooloo.sqlite');
 
 	$countriesResults = $db->query('SELECT * FROM ZCOUNTRY');
 	while ($country = $countriesResults->fetchArray()) {
