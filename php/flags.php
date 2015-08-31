@@ -1,17 +1,20 @@
 <?php
-	require_once('db.php');
 
-	$flagResults = $db->query('SELECT * FROM ZFLAG ORDER BY Z_PK ASC');
-	$flags = array();
+require_once('db.php');
 
-  	while ($flag = $flagResults->fetchArray()) {
-  		$flags[] = array(
-  			'id'		=>	$flag['Z_PK'],
-  			'name'		=>	$flag['ZNAME']
-  		);
-  	}
+try {
+  $flagResults = $db->query('SELECT * FROM ZFLAG ORDER BY Z_PK ASC');
+  $flags = array();
 
-  	echo json_encode($flags);
+  while ($flag = $flagResults->fetchArray()) {
+    $flags[] = array(
+        'id' => $flag['Z_PK'],
+        'name' => $flag['ZNAME']
+    );
+  }
 
-	$db->close();
+  echo json_encode($flags);
+} finally {
+  include 'db_cleanup.php';
+}
 ?>

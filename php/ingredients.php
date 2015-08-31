@@ -1,18 +1,21 @@
 <?php
-	require_once('db.php');
 
-	$ingredientResults = $db->query('SELECT * FROM ZINGREDIENT ORDER BY ZNAME ASC');
-	$ingredients = array();
+require_once('db.php');
 
-  	while ($ingredient = $ingredientResults->fetchArray()) {
-  		$ingredients[] = array(
-  			'id'		=>	$ingredient['Z_PK'],
-  			'name'		=>	$ingredient['ZNAME'],
-  			'spotlight'	=>	$ingredient['ZSPOTLIGHT'],
-  		);
-  	}
+try {
+  $ingredientResults = $db->query('SELECT * FROM ZINGREDIENT ORDER BY ZNAME ASC');
+  $ingredients = array();
 
-  	echo json_encode($ingredients);
+  while ($ingredient = $ingredientResults->fetchArray()) {
+    $ingredients[] = array(
+        'id' => $ingredient['Z_PK'],
+        'name' => $ingredient['ZNAME'],
+        'spotlight' => $ingredient['ZSPOTLIGHT'],
+    );
+  }
 
-	$db->close();
+  echo json_encode($ingredients);
+} finally {
+  include 'db_cleanup.php';
+}
 ?>

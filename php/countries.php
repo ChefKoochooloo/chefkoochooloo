@@ -1,45 +1,50 @@
 <?php
-	require_once('db.php');
 
-	$countryResults = $db->query('SELECT * FROM ZCOUNTRY ORDER BY ZNAME ASC');
-	$countries = array();
+require_once('db.php');
 
-	while ($country = $countryResults->fetchArray()) {
-		$countryFactsResults = $db->query('SELECT * FROM ZCOUNTRYFACT WHERE ZCOUNTRY = '.$country['Z_PK']);
-		$countryFacts = array();
+try {
+  $countryResults = $db->query('SELECT * FROM ZCOUNTRY ORDER BY ZNAME ASC');
+  $countries = array();
 
-		while ($countryFact = $countryFactsResults->fetchArray()) {
-			$countryFacts[] = array(
-				'id'	=>	$countryFact['Z_PK'],
-				'fact'	=>	$countryFact['ZFACT']
-			);
-		}
+  while ($country = $countryResults->fetchArray()) {
+    $countryFactsResults = $db->query('SELECT * FROM ZCOUNTRYFACT WHERE ZCOUNTRY = ' . $country['Z_PK']);
+    $countryFacts = array();
 
-		$countryIssuesResults = $db->query('SELECT * FROM ZCOUNTRYCHARITY WHERE ZCOUNTRY = '.$country['Z_PK']);
-		$countryIssues = array();
+    while ($countryFact = $countryFactsResults->fetchArray()) {
+      $countryFacts[] = array(
+          'id' => $countryFact['Z_PK'],
+          'fact' => $countryFact['ZFACT']
+      );
+    }
 
-		while ($countryIssue = $countryIssuesResults->fetchArray()) {
-			$countryIssues[] = array(
-				'id'	=>	$countryIssue['Z_PK'],
-				'url'	=> 	$countryIssue['ZURL'],
-				'issue'	=>	$countryIssue['ZDONATE']
-			);
-		}
+    $countryIssuesResults = $db->query('SELECT * FROM ZCOUNTRYCHARITY WHERE ZCOUNTRY = ' . $country['Z_PK']);
+    $countryIssues = array();
 
-		$countries[] = array(
-			'id'			=>	$country['Z_PK'],
-			'code'			=>	$country['ZCODE'],
-			'name'			=>	$country['ZNAME'],
-			'cover'			=>	$country['ZCOVER'],
-			'flag'			=>	$country['ZFLAG'],
-			'wish'			=> 	$country['ZWISH'],
-			'capital'		=> 	$country['ZCAPITAL'],
-			'population'	=> 	$country['ZPOPULATION'],
-			'languages'		=> 	$country['ZLANGUAGES'],
-			'facts'			=>	$countryFacts,
-			'issues'		=>	$countryIssues
-		);
-	}
+    while ($countryIssue = $countryIssuesResults->fetchArray()) {
+      $countryIssues[] = array(
+          'id' => $countryIssue['Z_PK'],
+          'url' => $countryIssue['ZURL'],
+          'issue' => $countryIssue['ZDONATE']
+      );
+    }
 
-	echo json_encode($countries);
+    $countries[] = array(
+        'id' => $country['Z_PK'],
+        'code' => $country['ZCODE'],
+        'name' => $country['ZNAME'],
+        'cover' => $country['ZCOVER'],
+        'flag' => $country['ZFLAG'],
+        'wish' => $country['ZWISH'],
+        'capital' => $country['ZCAPITAL'],
+        'population' => $country['ZPOPULATION'],
+        'languages' => $country['ZLANGUAGES'],
+        'facts' => $countryFacts,
+        'issues' => $countryIssues
+    );
+  }
+
+  echo json_encode($countries);
+} finally {
+  include 'db_cleanup.php';
+}
 ?>

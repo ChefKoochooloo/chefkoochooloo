@@ -1,32 +1,37 @@
 <?php
-	require_once('db.php');
 
-    $id = isset($_GET['id']) ? $_GET['id'] : '';
-    $country = isset($_GET['country']) ? $_GET['country'] : '';
-    $fact = isset($_GET['fact']) ? $_GET['fact'] : '';
+require_once('db.php');
 
-	switch ($_GET['action']) {
-		case 'insert':
-			$db->exec('INSERT INTO ZCOUNTRYFACT (ZCOUNTRY, ZFACT) VALUES ('.$country.', "'.$fact.'")');
-			$id = $db->lastInsertRowid();
-			break;
-		case 'update':
-			$db->exec('UPDATE ZCOUNTRYFACT SET ZFACT="'.$fact.'" WHERE Z_PK='.$id);
-			break;
-		case 'delete':
-			$db->exec('DELETE FROM ZCOUNTRYFACT WHERE Z_PK='.$id);
-			return;
-	}
+try {
+  $id = isset($_GET['id']) ? $_GET['id'] : '';
+  $country = isset($_GET['country']) ? $_GET['country'] : '';
+  $fact = isset($_GET['fact']) ? $_GET['fact'] : '';
 
-	if (!isset($id)) {
-		return;
-	}
+  switch ($_GET['action']) {
+    case 'insert':
+      $db->exec('INSERT INTO ZCOUNTRYFACT (ZCOUNTRY, ZFACT) VALUES (' . $country . ', "' . $fact . '")');
+      $id = $db->lastInsertRowid();
+      break;
+    case 'update':
+      $db->exec('UPDATE ZCOUNTRYFACT SET ZFACT="' . $fact . '" WHERE Z_PK=' . $id);
+      break;
+    case 'delete':
+      $db->exec('DELETE FROM ZCOUNTRYFACT WHERE Z_PK=' . $id);
+      return;
+  }
 
-	$fact = $db->querySingle('SELECT * FROM ZCOUNTRYFACT WHERE Z_PK='.$id, true);
+  if (!isset($id)) {
+    return;
+  }
 
-	echo json_encode(array(
-		'id'		=>	$id,
-		'country'	=> 	$fact['ZCOUNTRY'],
-		'fact'		=>	$fact['ZFACT']
-	));
+  $fact = $db->querySingle('SELECT * FROM ZCOUNTRYFACT WHERE Z_PK=' . $id, true);
+
+  echo json_encode(array(
+      'id' => $id,
+      'country' => $fact['ZCOUNTRY'],
+      'fact' => $fact['ZFACT']
+  ));
+} finally {
+  include 'db_cleanup.php';
+}
 ?>

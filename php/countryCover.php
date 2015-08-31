@@ -1,27 +1,33 @@
 <?php
-	require_once('db.php');
-	require_once('imageManipulator.php');
 
-    $id = isset($_GET['id']) ? $_GET['id'] : '';
+require_once('db.php');
+require_once('imageManipulator.php');
 
-	if (!empty($_FILES)) {
-		$country = $db->querySingle('SELECT * FROM ZCOUNTRY WHERE Z_PK='.$id, true);
+try {
+  $id = isset($_GET['id']) ? $_GET['id'] : '';
 
-		$validExtensions = array('.jpg', '.jpeg', '.gif', '.png', '.JPG', '.JPEG');
-    	// get extension of the uploaded file
-   		$fileExtension = strrchr($_FILES['file']['name'], ".");
-   		// check if file Extension is on the list of allowed ones
-   		if (in_array($fileExtension, $validExtensions)) {
-    	  	$newNamePrefix = time() . '_';
-     	   	$manipulator = new ImageManipulator($_FILES['file']['tmp_name']);
+  if (!empty($_FILES)) {
+    $country = $db->querySingle('SELECT * FROM ZCOUNTRY WHERE Z_PK=' . $id, true);
 
-     	   	$db->exec('UPDATE ZCOUNTRY SET ZCOVER="images/'. $country['ZCODE'] . $fileExtension .'" WHERE Z_PK='.$country['Z_PK']);
+    $validExtensions = array('.jpg', '.jpeg', '.gif', '.png', '.JPG', '.JPEG');
+    // get extension of the uploaded file
+    $fileExtension = strrchr($_FILES['file']['name'], ".");
+    // check if file Extension is on the list of allowed ones
+    if (in_array($fileExtension, $validExtensions)) {
+      $newNamePrefix = time() . '_';
+      $manipulator = new ImageManipulator($_FILES['file']['tmp_name']);
 
-      	 	// saving file to uploads folder
-      	  	$manipulator->save('../images/' . $country['ZCODE'] . $fileExtension);
+      $db->exec('UPDATE ZCOUNTRY SET ZCOVER="images/' . $country['ZCODE'] . $fileExtension . '" WHERE Z_PK=' . $country['Z_PK']);
 
-error_log("HERE I AM file=" . '../images/' . $country['ZCODE'] . $fileExtension);
-   	 	} else {
-    	}
+      // saving file to uploads folder
+      $manipulator->save('../images/' . $country['ZCODE'] . $fileExtension);
+
+      error_log("HERE I AM file=" . '../images/' . $country['ZCODE'] . $fileExtension);
+    } else {
+
     }
+  }
+} finally {
+  include 'db_cleanup.php';
+}
 ?>

@@ -1,17 +1,20 @@
 <?php
-	require_once('db.php');
 
-	$unitResults = $db->query('SELECT * FROM ZUNIT ORDER BY ZNAME ASC');
-	$units = array();
+require_once('db.php');
 
-  	while ($unit = $unitResults->fetchArray()) {
-  		$units[] = array(
-  			'id'		=>	$unit['Z_PK'],
-  			'name'		=>	$unit['ZNAME']
-  		);
-  	}
+try {
+  $unitResults = $db->query('SELECT * FROM ZUNIT ORDER BY ZNAME ASC');
+  $units = array();
 
-  	echo json_encode($units);
+  while ($unit = $unitResults->fetchArray()) {
+    $units[] = array(
+        'id' => $unit['Z_PK'],
+        'name' => $unit['ZNAME']
+    );
+  }
 
-	$db->close();
+  echo json_encode($units);
+} finally {
+  include 'db_cleanup.php';
+}
 ?>

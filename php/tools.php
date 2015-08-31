@@ -1,18 +1,21 @@
 <?php
-	require_once('db.php');
 
-	$toolResults = $db->query('SELECT * FROM ZTOOL ORDER BY ZNAME ASC');
-	$tools = array();
+require_once('db.php');
 
-    while ($tool = $toolResults->fetchArray()) {
-  		$tools[] = array(
-  			'id'		=>	$tool['Z_PK'],
-  			'name'	=>	$tool['ZNAME'],
-  			'url'	  =>	$tool['ZURL']
-  		);
-  	}
+try {
+  $toolResults = $db->query('SELECT * FROM ZTOOL ORDER BY ZNAME ASC');
+  $tools = array();
 
-  	echo json_encode($tools);
+  while ($tool = $toolResults->fetchArray()) {
+    $tools[] = array(
+        'id' => $tool['Z_PK'],
+        'name' => $tool['ZNAME'],
+        'url' => $tool['ZURL']
+    );
+  }
 
-	$db->close();
+  echo json_encode($tools);
+} finally {
+  include 'db_cleanup.php';
+}
 ?>

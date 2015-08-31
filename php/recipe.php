@@ -1,110 +1,114 @@
 <?php
-	require_once('db.php');
 
-    $id = isset($_GET['id']) ? $_GET['id'] : '';
-    $country = isset($_GET['country']) ? $_GET['country'] : '';
-    $in_type = isset($_GET['type']) ? $_GET['type'] : '';
-    $name = isset($_GET['name']) ? $_GET['name'] : '';
-    $presentation = isset($_GET['presentation']) ? $_GET['presentation'] : '';
-    $time = isset($_GET['time']) ? $_GET['time'] : '';
+require_once('db.php');
 
-	switch ($_GET['action']) {
-		case 'insert':
-			$db->exec('INSERT INTO ZRECIPE (ZCOUNTRY) VALUES ('.$country.')');
-			$id = $db->lastInsertRowid();
-			break;
-		case 'update':
-			$db->exec('UPDATE ZRECIPE SET ZNAME="'.$name.'", ZPRESENTATION="'.$presentation.'", ZTIME="'.$time.'" WHERE Z_PK='.$id);
-			break;
-		case 'delete':
-			$recipeImageResults = $db->query('SELECT * FROM ZRECIPEIMAGE WHERE ZRECIPE = '.$id);
-			while ($recipeImage = $recipeImageResults->fetchArray()) {
-        		unlink('../'.$recipeImage['ZURL']);
-			}
+try {
+  $id = isset($_GET['id']) ? $_GET['id'] : '';
+  $country = isset($_GET['country']) ? $_GET['country'] : '';
+  $in_type = isset($_GET['type']) ? $_GET['type'] : '';
+  $name = isset($_GET['name']) ? $_GET['name'] : '';
+  $presentation = isset($_GET['presentation']) ? $_GET['presentation'] : '';
+  $time = isset($_GET['time']) ? $_GET['time'] : '';
 
-			$db->exec('DELETE FROM ZRECIPE WHERE Z_PK='.$id);
-			return;
-	}
+  switch ($_GET['action']) {
+    case 'insert':
+      $db->exec('INSERT INTO ZRECIPE (ZCOUNTRY) VALUES (' . $country . ')');
+      $id = $db->lastInsertRowid();
+      break;
+    case 'update':
+      $db->exec('UPDATE ZRECIPE SET ZNAME="' . $name . '", ZPRESENTATION="' . $presentation . '", ZTIME="' . $time . '" WHERE Z_PK=' . $id);
+      break;
+    case 'delete':
+      $recipeImageResults = $db->query('SELECT * FROM ZRECIPEIMAGE WHERE ZRECIPE = ' . $id);
+      while ($recipeImage = $recipeImageResults->fetchArray()) {
+        unlink('../' . $recipeImage['ZURL']);
+      }
 
-	if (!isset($id)) {
-		return;
-	}
+      $db->exec('DELETE FROM ZRECIPE WHERE Z_PK=' . $id);
+      return;
+  }
 
-	$recipe = $db->querySingle('SELECT * FROM ZRECIPE WHERE Z_PK='.$id, true);
+  if (!isset($id)) {
+    return;
+  }
 
-	//RECIPE FLAGS
-	$recipeFlagResults = $db->query('SELECT * FROM ZRECIPEFLAG WHERE ZRECIPE='.$id);
-	$recipeFlags = array();
+  $recipe = $db->querySingle('SELECT * FROM ZRECIPE WHERE Z_PK=' . $id, true);
 
-	while ($recipeFlag = $recipeFlagResults->fetchArray()) {
-		$recipeFlags[] = array(
-			'id'		=>	$recipeFlag['Z_PK'],
-			'recipe'	=>	$recipeFlag['ZRECIPE'],
-			'flag'		=> 	$recipeFlag['ZFLAG']
-		);
-	}
+//RECIPE FLAGS
+  $recipeFlagResults = $db->query('SELECT * FROM ZRECIPEFLAG WHERE ZRECIPE=' . $id);
+  $recipeFlags = array();
 
-	//RECIPE IMAGES
-  	$recipeImageResults = $db->query('SELECT * FROM ZRECIPEIMAGE WHERE ZRECIPE = '.$id);
-	$recipeImages = array();
-	while ($recipeImage = $recipeImageResults->fetchArray()) {
-		$recipeImages[] = array(
-			'id'			=>	$recipeImage['Z_PK'],
-			'url'			=>	$recipeImage['ZURL'],
-			'alt'			=>	$recipeImage['ZALT'],
-			'presentation'	=>	$recipeImage['ZPRESENTATION']
-		);
-	}
+  while ($recipeFlag = $recipeFlagResults->fetchArray()) {
+    $recipeFlags[] = array(
+        'id' => $recipeFlag['Z_PK'],
+        'recipe' => $recipeFlag['ZRECIPE'],
+        'flag' => $recipeFlag['ZFLAG']
+    );
+  }
 
-	//RECIPE STEPS
-	$recipeStepResults = $db->query('SELECT * FROM ZRECIPESTEP WHERE ZRECIPE = '.$id.' ORDER BY ZORDER ASC');
-	$recipeSteps = array();
+//RECIPE IMAGES
+  $recipeImageResults = $db->query('SELECT * FROM ZRECIPEIMAGE WHERE ZRECIPE = ' . $id);
+  $recipeImages = array();
+  while ($recipeImage = $recipeImageResults->fetchArray()) {
+    $recipeImages[] = array(
+        'id' => $recipeImage['Z_PK'],
+        'url' => $recipeImage['ZURL'],
+        'alt' => $recipeImage['ZALT'],
+        'presentation' => $recipeImage['ZPRESENTATION']
+    );
+  }
 
-	while ($recipeStep = $recipeStepResults->fetchArray()) {
-		$recipeSteps[] = array(
-			'id'	=>	$recipeStep['Z_PK'],
-			'order'	=>	$recipeStep['ZORDER'],
-			'type'	=>	$recipeStep['ZTYPE'],
-			'label'	=>	$recipeStep['ZLABEL']
-		);
-	}
+//RECIPE STEPS
+  $recipeStepResults = $db->query('SELECT * FROM ZRECIPESTEP WHERE ZRECIPE = ' . $id . ' ORDER BY ZORDER ASC');
+  $recipeSteps = array();
 
-  	//RECIPE INGREDIENTS
-	$recipeIngredientResults = $db->query('SELECT * FROM ZRECIPEINGREDIENT WHERE ZRECIPE = '.$id);
-	$recipeIngredients = array();
+  while ($recipeStep = $recipeStepResults->fetchArray()) {
+    $recipeSteps[] = array(
+        'id' => $recipeStep['Z_PK'],
+        'order' => $recipeStep['ZORDER'],
+        'type' => $recipeStep['ZTYPE'],
+        'label' => $recipeStep['ZLABEL']
+    );
+  }
 
-	while ($recipeIngredient = $recipeIngredientResults->fetchArray()) {
-		$recipeIngredients[] = array(
-			'id'			=>	$recipeIngredient['Z_PK'],
-			'ingredient'	=>	$recipeIngredient['ZINGREDIENT'],
-			'unit'			=>	$recipeIngredient['ZUNIT'],
-			'amount'		=>	$recipeIngredient['ZAMOUNT']
-		);
-	}
+//RECIPE INGREDIENTS
+  $recipeIngredientResults = $db->query('SELECT * FROM ZRECIPEINGREDIENT WHERE ZRECIPE = ' . $id);
+  $recipeIngredients = array();
 
-  	//RECIPE TOOLS
-	$recipeToolResults = $db->query('SELECT * FROM ZRECIPETOOL WHERE ZRECIPE = '.$id);
-	$recipeTools = array();
+  while ($recipeIngredient = $recipeIngredientResults->fetchArray()) {
+    $recipeIngredients[] = array(
+        'id' => $recipeIngredient['Z_PK'],
+        'ingredient' => $recipeIngredient['ZINGREDIENT'],
+        'unit' => $recipeIngredient['ZUNIT'],
+        'amount' => $recipeIngredient['ZAMOUNT']
+    );
+  }
 
-	while ($recipeTool = $recipeToolResults->fetchArray()) {
-		$recipeTools[] = array(
-			'id'	=>	$recipeTool['Z_PK'],
-			'tool'	=>	$recipeTool['ZTOOL']
-		);
-	}
+//RECIPE TOOLS
+  $recipeToolResults = $db->query('SELECT * FROM ZRECIPETOOL WHERE ZRECIPE = ' . $id);
+  $recipeTools = array();
 
-	echo json_encode(array(
-		'id'			=>	$id,
-		'country'		=>	$recipe['ZCOUNTRY'],
-		'type'			=>	$recipe['ZTYPE'],
-		'name'			=>	$recipe['ZNAME'],
-		'presentation'	=>	$recipe['ZPRESENTATION'],
-		'time'			=>	$recipe['ZTIME'],
+  while ($recipeTool = $recipeToolResults->fetchArray()) {
+    $recipeTools[] = array(
+        'id' => $recipeTool['Z_PK'],
+        'tool' => $recipeTool['ZTOOL']
+    );
+  }
 
-		'flags'			=>	$recipeFlags,
-		'images'		=> 	$recipeImages,
-  		'steps'			=>	$recipeSteps,
-  		'ingredients'	=>	$recipeIngredients,
-  		'tools'			=>	$recipeTools
-	));
+  echo json_encode(array(
+      'id' => $id,
+      'country' => $recipe['ZCOUNTRY'],
+      'type' => $recipe['ZTYPE'],
+      'name' => $recipe['ZNAME'],
+      'presentation' => $recipe['ZPRESENTATION'],
+      'time' => $recipe['ZTIME'],
+      'flags' => $recipeFlags,
+      'images' => $recipeImages,
+      'steps' => $recipeSteps,
+      'ingredients' => $recipeIngredients,
+      'tools' => $recipeTools
+  ));
+} finally {
+  include 'db_cleanup.php';
+}
 ?>
